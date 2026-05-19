@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Nguyễn Phạm Duy Mạnh — Web Developer & Creative Engineer. Portfolio showcasing modern web applications with focus on performance and user experience."/>
+    <meta name="keywords" content="web developer, frontend, React, Angular, NodeJS, PHP, portfolio, Vietnam"/>
+    <meta property="og:title" content="DUY MẠNH — Web Developer Portfolio"/>
+    <meta property="og:description" content="Building high-performance digital experiences with modern web technologies."/>
+    <meta property="og:type" content="website"/>
+    <title>KINETIC ARCHIVE | NGUYỄN PHẠM DUY MẠNH</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#ffffff",
+                        "inverse-on-surface": "#555555",
+                        "surface-container-high": "#1f1f1f",
+                        "surface-container-highest": "#262626",
+                        "surface-bright": "#2c2c2c",
+                        "surface-variant": "#262626",
+                        "outline": "#757575",
+                        "outline-variant": "#484848",
+                        "surface-container-lowest": "#000000",
+                        "surface-container": "#191919",
+                        "surface-container-low": "#131313",
+                        "on-surface-variant": "#ababab",
+                        "inverse-surface": "#f9f9f9",
+                        "surface": "#0e0e0e",
+                        "background": "#0e0e0e",
+                        "primary": "#ffe792",
+                        "primary-dim": "#efc900",
+                        "on-primary-fixed": "#453900",
+                        "on-surface": "#ffffff",
+                        "surface-dim": "#0e0e0e",
+                        "primary-fixed": "#ffd709",
+                        "primary-container": "#ffd709"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "sm": "0.125rem",
+                        "md": "0.375rem",
+                        "lg": "0.25rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline":["Space Grotesk", "sans-serif"],
+                        "body":["Manrope", "sans-serif"],
+                        "label":["Space Grotesk", "sans-serif"]
+                    },
+                    letterSpacing: {
+                        "tech": "0.1em"
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        /* === LOADER === */
+        #loader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: #000;
+            display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 24px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700; letter-spacing: -0.04em; text-transform: uppercase;
+            color: #ffe792;
+            overflow: hidden;
+        }
+        .loader-text span {
+            display: inline-block;
+            transform: translateY(100%);
+            animation: slideUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        @keyframes slideUp {
+            to { transform: translateY(0); }
+        }
+        .loader-bar {
+            width: 200px; height: 2px; background: #262626; border-radius: 2px; overflow: hidden;
+        }
+        .loader-bar::after {
+            content: ''; display: block; height: 100%; width: 0;
+            background: linear-gradient(90deg, #efc900, #ffe792);
+            animation: loadBar 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes loadBar {
+            to { width: 100%; }
+        }
+
+        /* === BASE === */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh; z-index: -2;
+            background: linear-gradient(90deg, rgba(239, 201, 0, 0.15) 0%, rgba(239, 201, 0, 0.05) 25%, rgba(0, 0, 0, 1) 33.33%, rgba(0, 0, 0, 1) 100%);
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed; top: 0; left: 33.33%;
+            width: 300px; height: 50vh;
+            background: radial-gradient(ellipse at center, rgba(255, 231, 146, 0.15) 0%, transparent 65%);
+            transform: translate(-50%, -50%); z-index: -1; pointer-events: none;
+            animation: boundaryRun 6s infinite ease-in-out alternate;
+        }
+
+        @keyframes boundaryRun {
+            0% { top: 0%; opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0.2; }
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .cyber-grid {
+            background-image: radial-gradient(#ffe7921a 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .text-glow {
+            text-shadow: 0 0 15px rgba(255, 231, 146, 0.4);
+        }
+        .gold-ambient-shadow {
+            box-shadow: 0 0 40px rgba(255, 231, 146, 0.08);
+            transition: box-shadow 0.4s ease;
+        }
+        .gold-ambient-shadow:hover {
+            box-shadow: 0 0 60px rgba(255, 231, 146, 0.15);
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+
+        /* Header scroll state */
+        .header-scrolled {
+            background: rgba(0, 0, 0, 0.8) !important;
+            backdrop-filter: blur(20px) !important;
+            border-bottom-color: rgba(72, 72, 72, 0.15) !important;
+        }
+
+        /* Mobile menu */
+        #mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        #mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Nav active state */
+        .nav-link.active {
+            color: #ffe792 !important;
+        }
+
+        /* Typing cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            color: #ffe792;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Project image placeholders */
+        .project-img-trioflix {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+        }
+        .project-img-f4store {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b30 40%, #44203a 100%);
+        }
+
+        /* Marquee */
+        .marquee-track {
+            display: flex;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Skill bar */
+        .skill-bar {
+            height: 3px; background: #262626; border-radius: 2px; overflow: hidden;
+        }
+        .skill-bar-fill {
+            height: 100%; border-radius: 2px;
+            background: linear-gradient(90deg, #efc900, #ffe792);
+            width: 0; transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .skill-bar-fill.animated {
+            /* width set inline */
+        }
+
+        /* Stat counter */
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="selection:bg-primary selection:text-on-primary-fixed">
+
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-text"><span>KINETIC ARCHIVE</span></div>
+        <div class="loader-bar"></div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden">
+        <button id="mobile-menu-close" class="absolute top-6 right-6 text-primary">
+            <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+        <a class="nav-link text-primary font-headline text-2xl font-bold tracking-tighter uppercase" href="#work" onclick="closeMobileMenu()">Work</a>
+        <a class="nav-link text-on-surface-variant font-headline text-2xl font-bold tracking-tighter uppercase" href="#skills" onclick="closeMobileMenu()">Skills</a>
+        <a class="nav-link text-on-surface-variant font-headline text-2xl font-bold tracking-tighter uppercase" href="#experience" onclick="closeMobileMenu()">Experience</a>
+        <a class="nav-link text-on-surface-variant font-headline text-2xl font-bold tracking-tighter uppercase" href="#education" onclick="closeMobileMenu()">Education</a>
+        <a class="nav-link text-on-surface-variant font-headline text-2xl font-bold tracking-tighter uppercase" href="#contact" onclick="closeMobileMenu()">Contact</a>
+        <div class="mt-8">
+            <a class="bg-gradient-to-r from-primary-dim to-primary text-on-primary-fixed font-headline font-bold px-8 py-3 rounded-sm uppercase text-sm" href="#contact" onclick="closeMobileMenu()">Hire Me</a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-10 py-6 max-w-[1440px] left-1/2 -translate-x-1/2 bg-transparent z-50 border-b border-transparent transition-all duration-500">
+        <a href="#" class="text-2xl font-bold tracking-tighter text-primary font-headline uppercase text-glow">KINETIC ARCHIVE</a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex gap-10 items-center">
+            <a class="nav-link text-on-surface-variant font-medium font-headline tracking-tighter uppercase hover:text-primary transition-colors duration-300" href="#work">Work</a>
+            <a class="nav-link text-on-surface-variant font-medium font-headline tracking-tighter uppercase hover:text-primary transition-colors duration-300" href="#skills">Skills</a>
+            <a class="nav-link text-on-surface-variant font-medium font-headline tracking-tighter uppercase hover:text-primary transition-colors duration-300" href="#experience">Experience</a>
+            <a class="nav-link text-on-surface-variant font-medium font-headline tracking-tighter uppercase hover:text-primary transition-colors duration-300" href="#education">Education</a>
+            <a class="nav-link text-on-surface-variant font-medium font-headline tracking-tighter uppercase hover:text-primary transition-colors duration-300" href="#contact">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
+            <a class="hidden md:block bg-gradient-to-r from-primary-dim to-primary text-on-primary-fixed font-headline font-bold px-6 py-2 rounded-sm scale-95 hover:scale-100 hover:shadow-[0_0_20px_rgba(255,231,146,0.4)] transition-all duration-300 uppercase text-sm" href="#contact">Hire Me</a>
+            <button id="mobile-menu-btn" class="md:hidden text-primary">
+                <span class="material-symbols-outlined text-3xl">menu</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative min-h-screen flex items-center px-6 md:px-10 pt-32 pb-20 overflow-hidden">
+            <div class="absolute inset-0 cyber-grid opacity-20 pointer-events-none"></div>
+            <div class="container mx-auto grid md:grid-cols-12 gap-8 items-center relative z-10">
+                <div class="md:col-span-7 z-10 reveal">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_#4ade80]"></span>
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">Open to opportunities</span>
+                    </div>
+                    <h2 class="font-label text-primary text-xs md:text-sm tracking-tech mb-6 uppercase">Web Developer & Creative Engineer</h2>
+                    <h1 class="font-headline text-[clamp(3rem,8vw,7rem)] leading-[0.9] font-bold tracking-tighter mb-8 text-glow">
+                        DUY<br/><span class="text-primary-dim">MẠNH.</span>
+                    </h1>
+                    <p class="font-body text-on-surface-variant max-w-lg text-base md:text-lg mb-10 leading-relaxed">
+                        Chuyên gia phát triển ứng dụng web với tư duy thẩm mỹ hiện đại. Biến ý tưởng thành trải nghiệm số mượt mà, hiệu năng cao — từ giao diện đến hạ tầng backend.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a class="group flex items-center gap-3 bg-gradient-to-r from-primary-dim to-primary text-on-primary-fixed px-8 py-4 rounded-sm hover:shadow-[0_0_30px_rgba(255,231,146,0.3)] transition-all duration-300" href="#work">
+                            <span class="font-headline font-bold uppercase tracking-wider text-sm">Xem dự án</span>
+                            <span class="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_outward</span>
+                        </a>
+                        <a class="group flex items-center gap-3 bg-transparent border border-outline-variant/20 px-8 py-4 rounded-sm hover:border-primary/40 backdrop-blur-sm transition-all duration-300" href="#contact">
+                            <span class="font-headline font-bold uppercase tracking-wider text-primary text-sm">Liên hệ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="md:col-span-5 relative aspect-[4/5] bg-surface-container-high/50 backdrop-blur-md rounded-xl overflow-hidden gold-ambient-shadow reveal delay-200 mt-10 md:mt-0 border border-outline-variant/10">
+                    <img alt="Portrait" class="w-full h-full object-cover opacity-80 scale-105 hover:scale-100 transition-transform duration-700 mix-blend-luminosity hover:mix-blend-normal" src="z7656859844696_919ebafc7171907c0a975195c4062b9a.jpg"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-90 pointer-events-none"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <div class="bg-surface-bright/60 backdrop-blur-md px-4 py-3 rounded-sm border border-outline-variant/20">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_#ffe792]"></span>
+                                    <span class="font-label text-[0.65rem] tracking-tech text-primary uppercase">Available for work</span>
+                                </div>
+                                <span class="font-label text-[0.60rem] tracking-tech text-on-surface-variant uppercase">Ho Chi Minh City</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute -right-32 top-1/3 text-[clamp(8rem,15vw,15rem)] font-headline font-black text-white/[0.02] select-none pointer-events-none rotate-90 tracking-tighter">KINETIC</div>
+        </section>
+
+        <!-- Stats Marquee -->
+        <section class="border-y border-outline-variant/10 py-6 overflow-hidden bg-surface-container-lowest/50 backdrop-blur-sm">
+            <div class="marquee-track">
+                <div class="flex items-center gap-16 px-8">
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="stat-number font-headline text-3xl md:text-4xl font-bold text-primary" data-target="12">0</span>
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">Websites<br/>Delivered</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="stat-number font-headline text-3xl md:text-4xl font-bold text-primary" data-target="2">0</span>
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">Full-Stack<br/>Projects</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="stat-number font-headline text-3xl md:text-4xl font-bold text-primary" data-target="5">0</span>
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">Tech Stacks<br/>Mastered</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="stat-number font-headline text-3xl md:text-4xl font-bold text-primary" data-target="1">0</span>
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">AI Workflow<br/>Automated</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">SEO &amp;</span>
+                        <span class="font-label text-primary text-xs tracking-tech uppercase">Google Ads</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                </div>
+                <div class="flex items-center gap-16 px-8">
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="stat-number font-headline text-3xl md:text-4xl font-bold text-primary" data-target="12">0</span>
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">Websites<br/>Delivered</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="stat-number font-headline text-3xl md:text-4xl font-bold text-primary" data-target="2">0</span>
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">Full-Stack<br/>Projects</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="stat-number font-headline text-3xl md:text-4xl font-bold text-primary" data-target="5">0</span>
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">Tech Stacks<br/>Mastered</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="stat-number font-headline text-3xl md:text-4xl font-bold text-primary" data-target="1">0</span>
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">AI Workflow<br/>Automated</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase">SEO &amp;</span>
+                        <span class="font-label text-primary text-xs tracking-tech uppercase">Google Ads</span>
+                    </div>
+                    <span class="text-outline-variant/30">/</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="py-32 px-6 md:px-10 bg-transparent relative z-10" id="about">
+            <div class="container mx-auto">
+                <div class="grid md:grid-cols-12 gap-12 md:gap-16 items-center">
+                    <div class="md:col-span-5 reveal">
+                        <span class="font-label text-primary text-xs tracking-tech uppercase block mb-4">About</span>
+                        <h2 class="font-headline text-4xl md:text-5xl font-bold tracking-tight uppercase leading-none">Sự<br/>nghiệm<br/>tạo<br/><span class="text-primary">hình.</span></h2>
+                    </div>
+                    <div class="md:col-span-7 reveal delay-200">
+                        <div class="space-y-6">
+                            <p class="font-body text-on-surface-variant text-base md:text-lg leading-relaxed">
+                                Xin chào, tôi là <span class="text-primary font-semibold">Duy Mạnh</span> — một Web Developer đam mê tạo ra những sản phẩm số không chỉ đẹp mà còn giải quyết đúng bài toán thực tế.
+                            </p>
+                            <p class="font-body text-on-surface-variant text-base md:text-lg leading-relaxed">
+                                Với nền tảng vững chắc từ FPT Polytechnic và kinh nghiệm thực chiến tại Iris Digital, tôi hiểu rằng một sản phẩm tốt là sự cân bằng giữa trải nghiệm người dùng, hiệu năng kỹ thuật và giá trị kinh doanh.
+                            </p>
+                            <p class="font-body text-on-surface-variant text-base md:text-lg leading-relaxed">
+                                Tôi không chỉ code — tôi <span class="text-primary">nghiên cứu</span>, <span class="text-primary">thiết kế</span> và <span class="text-primary">tối ưu</span> từng chi tiết để sản phẩm đạt chất lượng cao nhất có thể.
+                            </p>
+                            <div class="pt-4 flex flex-wrap gap-4">
+                                <a class="group flex items-center gap-2 text-primary font-headline font-bold uppercase tracking-wider text-sm hover:text-glow transition-all" href="#contact">
+                                    <span>Hợp tác ngay</span>
+                                    <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="py-32 px-6 md:px-10 bg-transparent border-y border-outline-variant/5 relative z-10" id="work">
+            <div class="container mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8 reveal">
+                    <div>
+                        <span class="font-label text-primary text-xs tracking-tech uppercase block mb-4">Selected Works</span>
+                        <h2 class="font-headline text-4xl md:text-5xl font-bold tracking-tight uppercase">Dự án tiêu biểu</h2>
+                    </div>
+                    <div class="font-body text-on-surface-variant max-w-xs text-left md:text-right text-sm md:text-base">Mỗi dự án là sự kết hợp giữa hiệu năng kỹ thuật và trải nghiệm người dùng tối ưu.</div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 md:gap-16">
+                    <!-- Project TrioFlix -->
+                    <div class="group relative bg-surface-container-highest/60 backdrop-blur-sm rounded-xl overflow-hidden gold-ambient-shadow reveal border border-outline-variant/10">
+                        <div class="aspect-video relative overflow-hidden">
+                            <div class="project-img-trioflix w-full h-full flex items-center justify-center">
+                                <div class="text-center">
+                                    <span class="font-headline text-3xl md:text-4xl font-bold text-white/80 uppercase tracking-tighter">TRIOFLIX</span>
+                                    <span class="block font-label text-white/40 text-xs tracking-tech uppercase mt-2">Streaming Platform</span>
+                                </div>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none"></div>
+                            <!-- Role tag -->
+                            <div class="absolute top-4 left-4 bg-primary/20 backdrop-blur-md border border-primary/30 px-3 py-1 rounded-sm">
+                                <span class="font-label text-primary text-[0.6rem] tracking-tech uppercase">Full-Stack Developer</span>
+                            </div>
+                        </div>
+                        <div class="p-8 relative z-10 -mt-12">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-headline text-3xl font-bold uppercase text-on-surface group-hover:text-primary transition-colors text-glow">TrioFlix</h3>
+                                <span class="material-symbols-outlined text-primary bg-surface/50 p-2 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all -translate-y-2 group-hover:translate-y-0">arrow_outward</span>
+                            </div>
+                            <p class="font-body text-on-surface-variant mb-6 text-sm md:text-base leading-relaxed">Nền tảng xem phim trực tuyến với hệ thống quản lý nội dung, tìm kiếm thông minh và giao diện tối ưu cho mọi thiết bị.</p>
+
+                            <!-- Key features -->
+                            <div class="grid grid-cols-2 gap-3 mb-6">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                    <span class="font-body text-on-surface-variant text-xs">Responsive Design</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                    <span class="font-body text-on-surface-variant text-xs">MVC Architecture</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                    <span class="font-body text-on-surface-variant text-xs">MySQL Database</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                    <span class="font-body text-on-surface-variant text-xs">User Auth System</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">PHP</span>
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">MySQL</span>
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">JavaScript</span>
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">MVC</span>
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">HTML/CSS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project F4 Store -->
+                    <div class="group relative bg-surface-container-highest/60 backdrop-blur-sm rounded-xl overflow-hidden gold-ambient-shadow reveal delay-200 mt-12 md:mt-24 border border-outline-variant/10">
+                        <div class="aspect-video relative overflow-hidden">
+                            <div class="project-img-f4store w-full h-full flex items-center justify-center">
+                                <div class="text-center">
+                                    <span class="font-headline text-3xl md:text-4xl font-bold text-white/80 uppercase tracking-tighter">F4 STORE</span>
+                                    <span class="block font-label text-white/40 text-xs tracking-tech uppercase mt-2">E-Commerce Platform</span>
+                                </div>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none"></div>
+                            <div class="absolute top-4 left-4 bg-primary/20 backdrop-blur-md border border-primary/30 px-3 py-1 rounded-sm">
+                                <span class="font-label text-primary text-[0.6rem] tracking-tech uppercase">Full-Stack Developer</span>
+                            </div>
+                        </div>
+                        <div class="p-8 relative z-10 -mt-12">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-headline text-3xl font-bold uppercase text-on-surface group-hover:text-primary transition-colors text-glow">F4 Store</h3>
+                                <span class="material-symbols-outlined text-primary bg-surface/50 p-2 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all -translate-y-2 group-hover:translate-y-0">arrow_outward</span>
+                            </div>
+                            <p class="font-body text-on-surface-variant mb-6 text-sm md:text-base leading-relaxed">Cửa hàng thời trang trực tuyến tích hợp quản lý kho, giỏ hàng thông minh, thanh toán an toàn và dashboard admin đầy đủ.</p>
+
+                            <div class="grid grid-cols-2 gap-3 mb-6">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                    <span class="font-body text-on-surface-variant text-xs">Inventory System</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                    <span class="font-body text-on-surface-variant text-xs">Payment Gateway</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                    <span class="font-body text-on-surface-variant text-xs">Admin Dashboard</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+                                    <span class="font-body text-on-surface-variant text-xs">RESTful API</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">Angular</span>
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">NodeJS</span>
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">MongoDB</span>
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">Express</span>
+                                <span class="px-4 py-1.5 bg-black/50 text-primary border border-outline-variant/20 font-label text-[0.70rem] tracking-tech uppercase rounded-l-full rounded-r-sm">REST API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="py-32 px-6 md:px-10 bg-transparent relative z-10" id="skills">
+            <div class="container mx-auto relative z-10">
+                <div class="text-center mb-16 reveal">
+                    <span class="font-label text-primary text-xs tracking-tech uppercase block mb-4">Arsenal</span>
+                    <h2 class="font-headline text-4xl md:text-5xl font-bold tracking-tight uppercase">Công nghệ cốt lõi</h2>
+                    <p class="font-body text-on-surface-variant mt-4 max-w-lg mx-auto text-sm md:text-base">Công nghệ tôi sử dụng hàng ngày để xây dựng sản phẩm chất lượng.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                    <!-- Frontend -->
+                    <div class="bg-surface-variant/20 backdrop-blur-[24px] border border-outline-variant/10 p-8 rounded-xl gold-ambient-shadow reveal">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="material-symbols-outlined text-primary">code</span>
+                            <h4 class="font-label text-on-surface text-sm uppercase tracking-tech">Frontend</h4>
+                        </div>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">React / Angular</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="85%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">HTML / CSS / TailwindCSS</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="90%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">JavaScript / TypeScript</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="80%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">UI/UX Design Implementation</span>
+                                    <span class="font-label text-on-surface-variant text-xs">Intermediate</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="70%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backend -->
+                    <div class="bg-surface-variant/20 backdrop-blur-[24px] border border-outline-variant/10 p-8 rounded-xl gold-ambient-shadow reveal delay-100">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="material-symbols-outlined text-primary">dns</span>
+                            <h4 class="font-label text-on-surface text-sm uppercase tracking-tech">Backend & Database</h4>
+                        </div>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">PHP / Laravel</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="80%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">NodeJS / Express</span>
+                                    <span class="font-label text-primary text-xs">Intermediate</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="70%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">MySQL / MongoDB</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="80%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">RESTful API / ERD Design</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="85%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tools & Workflow -->
+                    <div class="bg-surface-variant/20 backdrop-blur-[24px] border border-outline-variant/10 p-8 rounded-xl gold-ambient-shadow reveal delay-200">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="material-symbols-outlined text-primary">build</span>
+                            <h4 class="font-label text-on-surface text-sm uppercase tracking-tech">Tools & CMS</h4>
+                        </div>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">WordPress / WooCommerce</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="90%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">n8n / AI Workflow Automation</span>
+                                    <span class="font-label text-primary text-xs">Intermediate</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="75%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">Git / GitHub</span>
+                                    <span class="font-label text-on-surface-variant text-xs">Intermediate</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="70%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">VS Code / Dev Tools</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="85%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Marketing & Soft Skills -->
+                    <div class="bg-surface-variant/20 backdrop-blur-[24px] border border-outline-variant/10 p-8 rounded-xl gold-ambient-shadow reveal delay-300">
+                        <div class="flex items-center gap-3 mb-6">
+                            <span class="material-symbols-outlined text-primary">trending_up</span>
+                            <h4 class="font-label text-on-surface text-sm uppercase tracking-tech">Digital Marketing & More</h4>
+                        </div>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">SEO On-page / Off-page</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="80%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">Google Search Ads</span>
+                                    <span class="font-label text-on-surface-variant text-xs">Intermediate</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="65%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">English Communication</span>
+                                    <span class="font-label text-on-surface-variant text-xs">Basic</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="40%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-body text-on-surface-variant text-sm">Team Collaboration</span>
+                                    <span class="font-label text-primary text-xs">Advanced</span>
+                                </div>
+                                <div class="skill-bar"><div class="skill-bar-fill" data-width="85%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="py-32 px-6 md:px-10 bg-transparent border-y border-outline-variant/5 relative z-10" id="experience">
+            <div class="container mx-auto">
+                <div class="grid md:grid-cols-12 gap-12 md:gap-16">
+                    <div class="md:col-span-4 reveal">
+                        <span class="font-label text-primary text-xs tracking-tech uppercase block mb-4">Trajectory</span>
+                        <h2 class="font-headline text-4xl md:text-5xl font-bold tracking-tight uppercase leading-none">Kinh<br/>nghiệm</h2>
+                        <p class="font-body text-on-surface-variant mt-6 text-sm leading-relaxed">Hành trình phát triển sự nghiệp — từ thực tập sinh đến Full-Stack Developer.</p>
+                    </div>
+
+                    <div class="md:col-span-8 flex flex-col gap-6">
+                        <!-- Experience 1: Iris Digital -->
+                        <div class="group py-10 px-8 flex flex-col md:flex-row justify-between gap-8 bg-surface-container-low/60 backdrop-blur-md rounded-xl transition-all duration-500 hover:-translate-y-1 gold-ambient-shadow reveal delay-100 border border-outline-variant/10">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <h4 class="font-headline text-2xl font-bold text-primary uppercase group-hover:text-glow transition-all">Web Developer Intern</h4>
+                                </div>
+                                <span class="font-label text-on-surface text-xs tracking-tech uppercase">Iris Digital & Marketing Agency</span>
+                                <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase block mt-1">Ho Chi Minh City</span>
+
+                                <ul class="mt-6 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
+                                    <li class="flex gap-3 items-start"><span class="text-primary mt-1 shrink-0">▰</span> Quản lý và triển khai <span class="text-primary font-semibold">12 website</span> trên nền tảng WordPress cho các khách hàng doanh nghiệp.</li>
+                                    <li class="flex gap-3 items-start"><span class="text-primary mt-1 shrink-0">▰</span> Thiết kế hệ thống AI Agent Workflow bằng n8n — tự động hóa toàn bộ quy trình SEO: thu thập từ khóa, viết nội dung, và đăng bài.</li>
+                                    <li class="flex gap-3 items-start"><span class="text-primary mt-1 shrink-0">▰</span> Tối ưu SEO on-page giúp tăng lưu lượng truy cập organic cho các website khách hàng.</li>
+                                    <li class="flex gap-3 items-start"><span class="text-primary mt-1 shrink-0">▰</span> Phối hợp với team marketing để triển khai chiến dịch Google Search Ads.</li>
+                                </ul>
+                            </div>
+                            <div class="text-left md:text-right flex flex-col md:items-end gap-2 shrink-0">
+                                <span class="font-label text-on-surface-variant text-[0.75rem] tracking-tech uppercase">05/2023 — 08/2023</span>
+                                <span class="text-[0.65rem] text-primary bg-primary/10 px-3 py-1 rounded-sm font-label uppercase mt-2 w-fit md:w-auto border border-primary/20">Toàn thời gian</span>
+                                <div class="flex flex-wrap gap-2 mt-4 md:justify-end">
+                                    <span class="px-3 py-1 bg-surface-container-highest/60 text-on-surface-variant font-label text-[0.6rem] tracking-tech uppercase rounded-sm">WordPress</span>
+                                    <span class="px-3 py-1 bg-surface-container-highest/60 text-on-surface-variant font-label text-[0.6rem] tracking-tech uppercase rounded-sm">n8n</span>
+                                    <span class="px-3 py-1 bg-surface-container-highest/60 text-on-surface-variant font-label text-[0.6rem] tracking-tech uppercase rounded-sm">SEO</span>
+                                    <span class="px-3 py-1 bg-surface-container-highest/60 text-on-surface-variant font-label text-[0.6rem] tracking-tech uppercase rounded-sm">Google Ads</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Experience 2: Freelance -->
+                        <div class="group py-10 px-8 flex flex-col md:flex-row justify-between gap-8 bg-surface-container/30 backdrop-blur-md rounded-xl transition-all duration-500 hover:-translate-y-1 gold-ambient-shadow reveal delay-200 border border-outline-variant/10">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <h4 class="font-headline text-2xl font-bold text-on-surface uppercase group-hover:text-primary transition-all">Freelance Web Developer</h4>
+                                </div>
+                                <span class="font-label text-on-surface text-xs tracking-tech uppercase">Self-employed</span>
+                                <span class="font-label text-on-surface-variant text-xs tracking-tech uppercase block mt-1">Remote</span>
+
+                                <ul class="mt-6 space-y-3 text-on-surface-variant font-body text-sm leading-relaxed">
+                                    <li class="flex gap-3 items-start"><span class="text-primary mt-1 shrink-0">▰</span> Phát triển dự án full-stack <span class="text-primary font-semibold">TrioFlix</span> — nền tảng streaming với kiến trúc MVC và hệ thống quản lý phim.</li>
+                                    <li class="flex gap-3 items-start"><span class="text-primary mt-1 shrink-0">▰</span> Xây dựng <span class="text-primary font-semibold">F4 Store</span> — e-commerce thời trang với Angular, NodeJS, MongoDB và RESTful API.</li>
+                                    <li class="flex gap-3 items-start"><span class="text-primary mt-1 shrink-0">▰</span> Liên tục học và ứng dụng các công nghệ mới vào dự án thực tế.</li>
+                                </ul>
+                            </div>
+                            <div class="text-left md:text-right flex flex-col md:items-end gap-2 shrink-0">
+                                <span class="font-label text-on-surface-variant text-[0.75rem] tracking-tech uppercase">2023 — Present</span>
+                                <span class="text-[0.65rem] text-on-surface-variant bg-surface-container-highest/60 px-3 py-1 rounded-sm font-label uppercase mt-2 w-fit md:w-auto">Tự do</span>
+                                <div class="flex flex-wrap gap-2 mt-4 md:justify-end">
+                                    <span class="px-3 py-1 bg-surface-container-highest/60 text-on-surface-variant font-label text-[0.6rem] tracking-tech uppercase rounded-sm">PHP</span>
+                                    <span class="px-3 py-1 bg-surface-container-highest/60 text-on-surface-variant font-label text-[0.6rem] tracking-tech uppercase rounded-sm">Angular</span>
+                                    <span class="px-3 py-1 bg-surface-container-highest/60 text-on-surface-variant font-label text-[0.6rem] tracking-tech uppercase rounded-sm">NodeJS</span>
+                                    <span class="px-3 py-1 bg-surface-container-highest/60 text-on-surface-variant font-label text-[0.6rem] tracking-tech uppercase rounded-sm">MongoDB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="py-32 px-6 md:px-10 bg-transparent relative z-10" id="education">
+            <div class="container mx-auto">
+                <div class="grid md:grid-cols-12 gap-12 md:gap-16">
+                    <div class="md:col-span-4 reveal">
+                        <span class="font-label text-primary text-xs tracking-tech uppercase block mb-4">Foundation</span>
+                        <h2 class="font-headline text-4xl md:text-5xl font-bold tracking-tight uppercase leading-none">Học<br/>vấn</h2>
+                    </div>
+                    <div class="md:col-span-8">
+                        <div class="grid gap-8">
+                            <div class="bg-surface-container-highest/50 backdrop-blur-md p-8 md:p-12 rounded-xl gold-ambient-shadow reveal delay-100 relative overflow-hidden border border-outline-variant/10">
+                                <div class="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-primary to-primary-dim pointer-events-none"></div>
+                                <div class="flex flex-col md:flex-row justify-between mb-8 gap-4">
+                                    <div>
+                                        <h3 class="font-headline text-2xl md:text-3xl font-bold uppercase mb-2 text-glow">Web Development</h3>
+                                        <p class="font-label text-on-surface-variant text-xs md:text-sm tracking-tech uppercase">FPT POLYTECHNIC — Ho Chi Minh City</p>
+                                    </div>
+                                    <div class="bg-black/50 border border-outline-variant/20 px-6 py-2 h-fit rounded-full shadow-lg">
+                                        <span class="font-label text-primary text-xs md:text-sm tracking-tech">2024 — 2026</span>
+                                    </div>
+                                </div>
+                                <p class="font-body text-on-surface-variant text-sm md:text-base leading-relaxed max-w-2xl mb-6">
+                                    Chương trình đào tạo thực chiến tập trung vào kiến trúc hệ thống web, phát triển full-stack, và quản lý cơ sở dữ liệu. Học qua dự án thực tế với phương pháp PBL (Project-Based Learning).
+                                </p>
+                                <div class="flex flex-wrap gap-3">
+                                    <span class="px-3 py-1.5 bg-surface-variant/40 text-on-surface-variant font-label text-[0.65rem] tracking-tech uppercase rounded-sm">Web Architecture</span>
+                                    <span class="px-3 py-1.5 bg-surface-variant/40 text-on-surface-variant font-label text-[0.65rem] tracking-tech uppercase rounded-sm">Database Design</span>
+                                    <span class="px-3 py-1.5 bg-surface-variant/40 text-on-surface-variant font-label text-[0.65rem] tracking-tech uppercase rounded-sm">Full-Stack Development</span>
+                                    <span class="px-3 py-1.5 bg-surface-variant/40 text-on-surface-variant font-label text-[0.65rem] tracking-tech uppercase rounded-sm">Algorithms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="py-32 px-6 md:px-10 relative overflow-hidden bg-transparent border-t border-outline-variant/5 z-10" id="contact">
+            <div class="container mx-auto max-w-4xl relative z-10">
+                <div class="text-center mb-16 reveal">
+                    <span class="font-label text-primary text-xs tracking-tech uppercase block mb-6">Get in touch</span>
+                    <h2 class="font-headline text-[clamp(2.5rem,6vw,5rem)] font-bold tracking-tighter uppercase mb-6 leading-tight">Hãy cùng tạo nên<br/><span class="text-primary text-glow">điều kỳ diệu.</span></h2>
+                    <p class="font-body text-on-surface-variant max-w-lg mx-auto">Tôi luôn sẵn sàng lắng nghe cơ hội mới, dự án thú vị hoặc đơn giản là một cuộc trò chuyện về công nghệ.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 reveal delay-100">
+                    <!-- Email -->
+                    <a href="mailto:manh.nguyen.work5@gmail.com" class="group bg-surface-container-high/60 backdrop-blur-md p-8 rounded-xl gold-ambient-shadow hover:-translate-y-1 transition-all duration-500 border border-outline-variant/10 text-center">
+                        <span class="material-symbols-outlined text-primary text-3xl mb-4 block">mail</span>
+                        <span class="font-label text-outline text-[0.65rem] tracking-tech uppercase block mb-3">Email</span>
+                        <span class="font-headline text-sm text-primary font-bold group-hover:text-glow transition-all break-all">manh.nguyen.work5@gmail.com</span>
+                    </a>
+
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/m%E1%BA%A1nh-nguy%E1%BB%85n-a8655529a/" target="_blank" class="group bg-surface-container-high/60 backdrop-blur-md p-8 rounded-xl gold-ambient-shadow hover:-translate-y-1 transition-all duration-500 border border-outline-variant/10 text-center">
+                        <span class="material-symbols-outlined text-primary text-3xl mb-4 block">work</span>
+                        <span class="font-label text-outline text-[0.65rem] tracking-tech uppercase block mb-3">LinkedIn</span>
+                        <span class="font-headline text-sm text-primary font-bold group-hover:text-glow transition-all">Nguyễn Duy Mạnh</span>
+                    </a>
+
+                    <!-- Facebook -->
+                    <a href="https://web.facebook.com/manh.nguyen.592536" target="_blank" class="group bg-surface-container-high/60 backdrop-blur-md p-8 rounded-xl gold-ambient-shadow hover:-translate-y-1 transition-all duration-500 border border-outline-variant/10 text-center">
+                        <span class="material-symbols-outlined text-primary text-3xl mb-4 block">public</span>
+                        <span class="font-label text-outline text-[0.65rem] tracking-tech uppercase block mb-3">Facebook</span>
+                        <span class="font-headline text-sm text-primary font-bold group-hover:text-glow transition-all">Duy Mạnh Nguyễn</span>
+                    </a>
+                </div>
+
+                <!-- CTA -->
+                <div class="text-center mt-12 reveal delay-200">
+                    <a href="mailto:manh.nguyen.work5@gmail.com" class="inline-flex items-center gap-3 bg-gradient-to-r from-primary-dim to-primary text-on-primary-fixed px-10 py-4 rounded-sm hover:shadow-[0_0_30px_rgba(255,231,146,0.3)] transition-all duration-300">
+                        <span class="font-headline font-bold uppercase tracking-wider text-sm">Gửi email cho tôi</span>
+                        <span class="material-symbols-outlined text-xl">arrow_outward</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="absolute -bottom-48 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] pointer-events-none"></div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-transparent py-10 px-6 md:px-10 border-t border-outline-variant/10 relative z-10">
+        <div class="flex flex-col md:flex-row justify-between items-center w-full gap-6 max-w-[1440px] mx-auto">
+            <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+                <div class="text-primary font-bold font-label text-[0.65rem] md:text-[0.75rem] uppercase tracking-tech">&copy; 2025 THE KINETIC ARCHIVE.</div>
+                <span class="hidden md:block text-outline-variant/30">|</span>
+                <div class="text-on-surface-variant font-label text-[0.65rem] md:text-[0.75rem] uppercase tracking-tech">Designed & Built by Duy Manh</div>
+            </div>
+            <div class="flex gap-8 items-center">
+                <a class="text-on-surface-variant font-label text-[0.65rem] md:text-[0.75rem] uppercase tracking-tech hover:text-primary transition-colors" href="https://www.linkedin.com/in/m%E1%BA%A1nh-nguy%E1%BB%85n-a8655529a/" target="_blank">LinkedIn</a>
+                <a class="text-on-surface-variant font-label text-[0.65rem] md:text-[0.75rem] uppercase tracking-tech hover:text-primary transition-colors" href="https://web.facebook.com/manh.nguyen.592536" target="_blank">Facebook</a>
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_6px_#4ade80]"></span>
+                    <span class="text-on-surface-variant font-label text-[0.65rem] md:text-[0.75rem] uppercase tracking-tech">Online</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FAB -->
+    <a class="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 bg-primary w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-sm shadow-[0_0_30px_rgba(255,231,146,0.4)] hover:scale-110 transition-transform active:scale-95 group" href="#contact">
+        <span class="material-symbols-outlined text-on-primary-fixed text-2xl md:text-3xl font-bold group-hover:rotate-12 transition-transform">send</span>
+    </a>
+
+    <script>
+        // === LOADER ===
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 2200);
+        });
+
+        // === MOBILE MENU ===
+        const mobileMenu = document.getElementById('mobile-menu');
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+        document.getElementById('mobile-menu-close').addEventListener('click', closeMobileMenu);
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // === SCROLL-AWARE HEADER ===
+        const header = document.getElementById('main-header');
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 80) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+            lastScroll = currentScroll;
+        }, { passive: true });
+
+        // === ACTIVE NAV HIGHLIGHTING ===
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        function updateActiveNav() {
+            const scrollY = window.pageYOffset + 200;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + sectionId) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+        window.addEventListener('scroll', updateActiveNav, { passive: true });
+
+        // === SCROLL REVEAL ===
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0.15 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            // === SKILL BAR ANIMATION ===
+            const skillObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const fill = entry.target;
+                        fill.style.width = fill.dataset.width;
+                        fill.classList.add('animated');
+                        observer.unobserve(fill);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('.skill-bar-fill').forEach(bar => {
+                bar.style.width = '0%';
+                skillObserver.observe(bar);
+            });
+
+            // === STAT COUNTER ANIMATION ===
+            const statObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = parseInt(el.dataset.target);
+                        let current = 0;
+                        const increment = target / 40;
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                el.textContent = target + '+';
+                                clearInterval(timer);
+                            } else {
+                                el.textContent = Math.floor(current);
+                            }
+                        }, 40);
+                        observer.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('.stat-number').forEach(stat => {
+                statObserver.observe(stat);
+            });
+        });
+    </script>
+</body>
+</html>
